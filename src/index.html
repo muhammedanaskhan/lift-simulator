@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <main class="initial-form-container">
+        <div class="form">
+            <div class="form-row">
+                <h4>Number of floors</h4>
+                <input type="number" min="0" id="floors" placeholder="0">
+            </div>
+            <div class="form-row">
+                <h4>Number of lifts</h4>
+                <input type="number" min="0" id="lifts" placeholder="0">
+            </div>
+            <button class="submit-btn" id="submit">Simulate</button>
+        </div>
+    </main>
+
+    <main class="building-container" style="display: none;">
+        <div class="building-info">
+            <p id="displayFloors"></p>
+            <p id="displayLifts"></p>
+            <button class="back-btn" id="goBack">Go Back</button>
+        </div>
+        <div class="building">
+
+        </div>
+    </main>
+
+
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
