@@ -38,42 +38,58 @@ document.getElementById('goBack').addEventListener('click', function () {
 const buildFloors = () => {
     console.log('Building floors');
 
-    //clear the building first before building
+    // Clear the building first before building
     document.querySelector('.building').innerHTML = '';
 
     const building = document.querySelector('.building');
     for (let i = noOfFloors; i >= 1; i--) {
         const floorContainer = document.createElement('div');
-
         floorContainer.classList.add('floorContainer');
 
-        //  floor num
+        // Floor number
         const floorNumber = document.createElement('span');
         floorNumber.classList.add('floor-number');
         floorNumber.textContent = `Floor ${i}`;
 
-        //Up button
-        const upButton = document.createElement('button');
-        upButton.classList.add('up-button');
-        upButton.textContent = 'Up';
-
-        // Down btn
-        const downButton = document.createElement('button');
-        downButton.classList.add('down-button');
-        downButton.textContent = 'Down';
-
+        // Create buttons container
         const buttonsContainer = document.createElement('div');
         buttonsContainer.classList.add('buttons-container');
-        buttonsContainer.appendChild(upButton);
-        buttonsContainer.appendChild(downButton);
 
+        if (i === 1) {
+            // Up button only on the ground floor
+            const upButton = document.createElement('button');
+            upButton.classList.add('up-button');
+            upButton.textContent = 'Up';
+            buttonsContainer.appendChild(upButton);
+        } else if (i === noOfFloors) {
+            // Down button only on the topmost floor
+            const downButton = document.createElement('button');
+            downButton.classList.add('down-button');
+            downButton.textContent = 'Down';
+            buttonsContainer.appendChild(downButton);
+        } else {
+            // Both up and down buttons on all other floors
+            const upButton = document.createElement('button');
+            upButton.classList.add('up-button');
+            upButton.textContent = 'Up';
+            buttonsContainer.appendChild(upButton);
+
+            const downButton = document.createElement('button');
+            downButton.classList.add('down-button');
+            downButton.textContent = 'Down';
+            buttonsContainer.appendChild(downButton);
+        }
+
+        // Lift tunnel
         const liftTunnel = document.createElement('div');
         liftTunnel.classList.add('lift-tunnel');
 
+        // Append all elements to the floor container
         floorContainer.appendChild(floorNumber);
         floorContainer.appendChild(buttonsContainer);
         floorContainer.appendChild(liftTunnel);
 
+        // Append the floor container to the building
         building.appendChild(floorContainer);
     }
 }
