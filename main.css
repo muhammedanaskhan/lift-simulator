@@ -143,10 +143,15 @@ h4 {
 .lift-tunnel {
     flex-grow: 1;
     display: flex;
+    position: relative;
     background-color: rgb(239, 239, 239);
     height: 100%;
     border-radius: 16px;
     height: 56px;
+    padding: 4px 24px;
+    padding-left: 0;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
 .up-button {
@@ -175,9 +180,62 @@ h4 {
     width: 50px;
 }
 
+.lift {
+    width: 40px;
+    height: 56px;
+    position: absolute;
+    background-color: white;
+    border-radius: 4px;
+}
+
+.lift .gate {
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    background-color: rgb(98, 94, 94);
+    border: 1px solid rgb(255, 255, 255);
+}
+
+.left-gate {
+    left: 0;
+}
+
+.right-gate {
+    right: 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+::-webkit-scrollbar {
+    height: 4px;
+    /* height of horizontal scrollbar ← You're missing this */
+    width: 4px;
+    /* width of vertical scrollbar */
+    border: 1px solid #d5d5d5;
+}
+
 @media screen and (max-width: 768px) {
     .building-container {
-        max-width: 90%;
+        max-width: 90% !important;
         padding-left: 0;
         padding-right: 0;
     }
