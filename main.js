@@ -2,6 +2,7 @@ let noOfFloors = 0;
 let noOfLifts = 0;
 
 document.getElementById('submit').addEventListener('click', function () {
+    console.log('Submit button clicked');
     const floors = document.getElementById('floors').value;
     const lifts = document.getElementById('lifts').value;
 
