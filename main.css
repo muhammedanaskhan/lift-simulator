@@ -150,8 +150,7 @@ h4 {
     height: 56px;
     padding: 4px 24px;
     padding-left: 0;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: visible;
     z-index: 2;
 }
 
@@ -187,7 +186,7 @@ h4 {
     position: absolute;
     background-color: white;
     border-radius: 4px;
-    z-index: 5;
+    z-index: 2147483647;
 }
 
 .lift .gate {
