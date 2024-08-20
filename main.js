@@ -1,6 +1,13 @@
 let noOfFloors = 0;
 let noOfLifts = 0;
 let liftPositions = [];
+const heightOfAFloor = 80; // 80px
+
+const state = {
+    floors: 0,
+    lifts: [],
+    floorRequests: []
+};
 
 document.getElementById('submit').addEventListener('click', function () {
     console.log('Submit button clicked');
@@ -38,20 +45,24 @@ document.getElementById('goBack').addEventListener('click', function () {
 });
 
 const buildFloors = () => {
-    console.log('Building floors');
 
     // Clear the building first before building
     document.querySelector('.building').innerHTML = '';
 
-    generateFloors();
-    generateLifts();
+    initializeFloors();
+    initializeLifts();
+    handleBtnClicks();
 }
 
-const generateFloors = () => {
+const initializeFloors = () => {
     for (let i = noOfFloors - 1; i >= 0; i--) {
+        console.log('Floor number: ', i);
+        console.log('Floors: ', noOfFloors);
         const floorContainer = document.createElement('div');
         floorContainer.classList.add('floorContainer');
         floorContainer.id = `floor-${i}`;
+
+        console.log('Floor container: ', floorContainer);
 
         // Floor number
         const floorNumber = document.createElement('span');
@@ -64,33 +75,28 @@ const generateFloors = () => {
 
         if (i === 0) {
             // Up button only on the ground floor
-            const upButton = document.createElement('button');
-            upButton.classList.add('up-button');
-            upButton.textContent = 'Up';
-            buttonsContainer.appendChild(upButton);
-        } else if (i === noOfFloors - 1) {
-            // Down button only on the topmost floor
-            const downButton = document.createElement('button');
-            downButton.classList.add('down-button');
-            downButton.textContent = 'Down';
-            buttonsContainer.appendChild(downButton);
-        } else {
-            // Both up and down buttons on all other floors
-            const upButton = document.createElement('button');
-            upButton.classList.add('up-button');
-            upButton.textContent = 'Up';
-            buttonsContainer.appendChild(upButton);
 
-            const downButton = document.createElement('button');
-            downButton.classList.add('down-button');
-            downButton.textContent = 'Down';
-            buttonsContainer.appendChild(downButton);
+            buttonsContainer.innerHTML = `
+              <button id="down-button-${i}" class="floor-btn up-button">Up</button>
+          `;
+
+        } else if (i === noOfFloors - 1) {
+            buttonsContainer.innerHTML = `
+              <button id="down-button-${i}" class="floor-btn down-button">Down</button>
+          `;
+        } else {
+            buttonsContainer.innerHTML = `
+            <button id="up-button-${i}" class="floor-btn up-button">Up</button>
+            <button id="down-button-${i}" class="floor-btn down-button">Down</button>
+        `;
         }
 
         // Lift tunnel
         const liftTunnel = document.createElement('div');
         liftTunnel.classList.add('lift-tunnel');
         liftTunnel.id = `lift-tunnel-${i}`;
+
+        console.log('Lift tunnel: ', liftTunnel);
 
         // Append all elements to the floor container
         floorContainer.appendChild(floorNumber);
@@ -100,11 +106,24 @@ const generateFloors = () => {
         // Append the floor container to the building
         const building = document.querySelector('.building');
         building.appendChild(floorContainer);
+        console.log('Floor added: ', building);
     }
 }
 
-const generateLifts = () => {
+const initializeLifts = () => {
 
+    state.floors = noOfFloors;
+    for (let i = 1; i <= noOfLifts; i++) {
+        state.lifts.push({
+            id: i,
+            currentFloor: 0,
+            status: 'idle',
+            direction: null,
+            requests: []
+        });
+    }
+
+    console.log('State: ', state);
     const groundFloorLiftTunnel = document.getElementById('lift-tunnel-0');
 
     for (let i = 1; i <= noOfLifts; i++) {
@@ -126,4 +145,71 @@ const generateLifts = () => {
         lift.classList.add('lift');
         groundFloorLiftTunnel.appendChild(lift);
     }
+}
+
+const handleBtnClicks = () => {
+    floorBtns = document.querySelectorAll('.floor-btn');
+
+    floorBtns.forEach((button) => {
+        button.addEventListener("click", () => {
+
+            const btnId = button.id;
+            const floorWhichRequested = parseInt(btnId.split('-')[2]);
+
+            handleLiftRequest(floorWhichRequested);
+        });
+    });
+}
+
+const handleLiftRequest = (floorWhichRequested) => {
+    state.floorRequests.push(floorWhichRequested);
+    assignLiftToFloorAndMove(floorWhichRequested);
+}
+
+function assignLiftToFloorAndMove(floorWhichRequested) {
+    let nearestLift = null;
+    let shortestDistance = Infinity;
+
+    for (let lift of state.lifts) {
+        if (lift.status === 'idle') {
+            let distance = Math.abs(lift.currentFloor - floorWhichRequested);
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
+                nearestLift = lift;
+            }
+        }
+    }
+
+    if (nearestLift) {
+        nearestLift.requests.push(floorWhichRequested);
+        nearestLift.status = 'moving';
+        moveLift(nearestLift);
+    }
+}
+
+// Move lift
+function moveLift(lift) {
+    if (lift.requests.length === 0) {
+        lift.status = 'idle';
+        lift.direction = null;
+        return;
+    }
+
+    console.log('Lift: ', lift);
+
+    let targetFloor = lift.requests[0];
+    lift.direction = targetFloor > lift.currentFloor ? 'up' : 'down';
+
+    // Simulate lift movement
+    let floorsToMove = Math.abs(targetFloor - lift.currentFloor);
+    let movementTime = floorsToMove * 2000; // 2s per floor
+    const distanceToMove = floorsToMove * heightOfAFloor; // 50px per floor
+
+    const assignedLift = document.getElementById(`lift-${lift.id}`); 
+    console.log('Assigned lift: ', assignedLift);
+    console.log('Distance to move: ', distanceToMove);
+    console.log('Movement time: ', movementTime);
+    assignedLift.style.transition = `transform ${movementTime}ms linear`;
+    assignedLift.style.transform = `translateY(-${distanceToMove}px)`;
+    console.log('Lift moved: ', assignedLift);
 }
